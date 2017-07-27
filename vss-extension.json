@@ -4,6 +4,7 @@
     "name": "Deploy Web Application",
     "version": "0.0.3",
     "publisher": "smoksnes",
+    "public": true,
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
