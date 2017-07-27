@@ -1,0 +1,89 @@
+{
+    "id": "9ba719ff-4e79-4c65-af46-2629767117b1",
+    "name": "scb.deploy.core",
+    "friendlyName": "SCB: Deploy web application",
+    "description": "Deploys a .NET application.",
+    "helpMarkDown": "",
+    "category": "Deploy",
+    "author": "Sebastian Moksnes",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Deploy website",
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "Source",
+            "type": "string",
+            "label": "Source",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Folder to deploy."
+        },
+        {
+            "name": "SiteName",
+            "type": "string",
+            "label": "Site name",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The name of the site."
+        },
+        {
+            "name": "ServerName",
+            "type": "string",
+            "label": "Server name",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The name of the server."
+        },
+        {
+            "name": "TakeOffline",
+            "type": "boolean",
+            "label": "Take offline",
+            "defaultValue": "true",
+            "required": true,
+            "helpMarkDown": "Takes the server offline before deploy."
+        },
+        {
+            "name": "Username",
+            "type": "string",
+            "label": "Username",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Username to be used when accessing the server."
+        },
+        {
+            "name": "Password",
+            "type": "string",
+            "label": "Password",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Password to be used when accessing the server."
+        },
+        {
+            "name": "MsDeployPath",
+            "type": "filePath",
+            "label": "msdeploy.exe path",
+            "defaultValue": "C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe",
+            "required": true,
+            "helpMarkDown": "Where msdeploy is located.",
+            "groupName": "advanced"
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "deploy.ps1",
+            "platforms": [
+                "windows"
+            ]
+        }
+    }
+}

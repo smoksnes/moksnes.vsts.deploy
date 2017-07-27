@@ -1,0 +1,1 @@
+A simple tool for deploying core applications.
