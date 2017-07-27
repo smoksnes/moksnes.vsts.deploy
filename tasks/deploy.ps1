@@ -10,10 +10,10 @@ try {
     [string]$siteName = Get-VstsInput -Name SiteName -Require
     [string]$source = Get-VstsInput -Name Source -Require
     [bool]$takeOffline = Get-VstsInput -Name TakeOffline -Require -AsBool
+    [string]$skip = Get-VstsInput -Name Skip
 
 
-    if($takeOffline)
-    {
+    if($takeOffline) {
         Write-Host 'Will try to take site offline.'
 
         $pswd = ConvertTo-SecureString -String $password -AsPlainText -Force
@@ -29,9 +29,12 @@ try {
         Write-Host 'Finished taking site offline.'
     }
 
-    #Invoke-Expression "& '[path to msdeploy]\msdeploy.exe' --% -verb:sync -source:contentPath=`'$source`' -dest:contentPath=`'$dest`'"
     $args = "--% -verb:sync -source:iisApp=`'$source`' -dest:iisApp=`'$siteName`',computername=`'$serverName`'"
 
+    if($skip){
+        Write-Host "Adding skip."
+        $args += ",skip:Directory=`'$skip`'
+    }
 
     if ($username) {
         Write-Host 'Adding username to arguments.'
@@ -58,8 +61,6 @@ try {
         Write-Host 'Finished starting site'
     }
     Write-Host 'All done. Have a nice day. ;)'
-
-    #-verb:sync -source:iisApp="$(System.DefaultWorkingDirectory)/$(ArtifactFolder)" -dest:iisApp="$(IISSiteName)",computername=$(Machine),username=$(AdminUsername),password=$(AdminPassword) -skip:absolutePath="\\NLogs"
 
 } finally {
     Trace-VstsLeavingInvocation $MyInvocation

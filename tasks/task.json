@@ -76,6 +76,15 @@
             "required": true,
             "helpMarkDown": "Where msdeploy is located.",
             "groupName": "advanced"
+        },
+        {
+            "name": "Skip",
+            "type": "string",
+            "label": "Skip",
+            "defaultValue": "\\NLogs$",
+            "required": false,
+            "helpMarkDown": "Folders that will be skipped.",
+            "groupName": "advanced"
         }
     ],
     "execution": {
