@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "mosknes-vsts-deploy",
     "name": "Deploy Web Application",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "smoksnes",
     "public": true,
     "tags": [
