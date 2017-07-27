@@ -5,6 +5,11 @@
     "version": "0.0.3",
     "publisher": "smoksnes",
     "public": true,
+    "tags": [
+		"iis",
+		"website",
+		"deploy"
+	],
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
@@ -33,5 +38,14 @@
                 "name": "tasks"
             }
         }
-    ]
+    ],
+    "content": {
+		"details": {
+			"path": "overview.md"
+		}
+	},
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/smoksnes/moksnes.vsts.deploy"
+    }
 }
