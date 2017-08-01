@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
-    "id": "mosknes-vsts-deploy",
+    "id": "smoksnes-vsts-deploy",
     "name": "Deploy Web Application",
-    "version": "0.0.4",
+    "version": "0.0.11",
     "publisher": "smoksnes",
     "public": true,
     "tags": [
@@ -15,7 +15,7 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],    
-    "description": "Tool for deploying .NET application. Uses msdeploy but takes the site offline before deploying. Works well with .NET Core applications.",
+    "description": "Tool for deploying .NET application. Uses MSdeploy but takes the site offline before deploying. Works well with .NET Core applications.",
     "categories": [
         "Build and release"
     ],

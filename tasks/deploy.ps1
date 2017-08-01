@@ -12,10 +12,23 @@ try {
     [bool]$takeOffline = Get-VstsInput -Name TakeOffline -Require -AsBool
     [string]$skip = Get-VstsInput -Name Skip
 
+    function TakeOnline{
+        Write-Host 'Will try to take site online again.'
+        $pswd = ConvertTo-SecureString -String $password -AsPlainText -Force
+        $cred = New-Object System.Management.Automation.PSCredential -ArgumentList @($username, $pswd)
 
-    if($takeOffline) {
+        $ScriptBlock = { 
+            param($siteName) 
+            import-module WebAdministration; 
+            Start-Website $siteName
+        }
+
+        Invoke-Command -ComputerName $serverName -Credential $cred  $ScriptBlock -ArgumentList $siteName
+        Write-Host 'Finished starting site'
+    }
+
+    function TakeOffline{
         Write-Host 'Will try to take site offline.'
-
         $pswd = ConvertTo-SecureString -String $password -AsPlainText -Force
         $cred = New-Object System.Management.Automation.PSCredential -ArgumentList @($username, $pswd)
 
@@ -29,36 +42,46 @@ try {
         Write-Host 'Finished taking site offline.'
     }
 
-    $args = "--% -verb:sync -source:iisApp=`'$source`' -dest:iisApp=`'$siteName`',computername=`'$serverName`'"
 
-    if($skip){
-        Write-Host "Adding skip."
-        $args += ",skip:Directory=`'$skip`'
+    if($takeOffline) {
+        TakeOffline
     }
+
+    $args = "'-verb:sync' "
+    $args +="'-source:iisApp=$source' "
+    $args +="'-dest:iisApp=$siteName,computername=$serverName'"
+
 
     if ($username) {
         Write-Host 'Adding username to arguments.'
-         $args += ",username=`'$username`',password=`'$password`'"
-    } 
+         $args += ",username=$username,password=$password"
+    }
 
-    $msDeployQuery = "& '$msDeployPath'" + $args
+    if($skip){
+        Write-Host "Adding skip."
+        $args += " -skip:objectName=dirPath,absolutePath=$skip"
+    }
 
-    Invoke-Expression $msDeployQuery
+
+    $deployCmd = (Get-Command $msDeployPath).FileVersionInfo.FileName
+    $fullDeployCmd = "`"$deployCmd`""
+
+    invoke-expression "&$fullDeployCmd $args"
+    Write-Host "Exit code is $LASTEXITCODE"
+
+    if(!$LASTEXITCODE -eq 0) {
+        Write-Host 'Something went wrong during release.'
+        if($takeOffline)
+        {
+            TakeOnline
+        }
+        throw [System.Exception]::new('Deployment failed.','Something went wrong during deployment.')
+    }
+    
     Write-Host 'Deploy complete.'
     if($takeOffline)
     {
-        Write-Host 'Will try to take site online again.'
-        $pswd = ConvertTo-SecureString -String $password -AsPlainText -Force
-        $cred = New-Object System.Management.Automation.PSCredential -ArgumentList @($username, $pswd)
-
-        $ScriptBlock = { 
-            param($siteName) 
-            import-module WebAdministration; 
-            Start-Website $siteName
-        }
-
-        Invoke-Command -ComputerName $serverName -Credential $cred  $ScriptBlock -ArgumentList $siteName
-        Write-Host 'Finished starting site'
+        TakeOnline
     }
     Write-Host 'All done. Have a nice day. ;)'
 
